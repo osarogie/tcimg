@@ -20,20 +20,17 @@ class ImagesController < ApplicationController
   end
 
   def with_params
-    folder = File.join Rails.root, 'tmp', 'images'
-    FileUtils.mkdir_p(folder) unless File.exist?(folder)
-
-    file = request.fullpath.gsub('/', '_')
-    file_location = File.join folder, file
-
     aws_folder = 'http://thecommunity-assets.s3.amazonaws.com/uploads'
     download_link = "http://cdn.filter.to/#{params[:img_params]}/#{aws_folder}/#{params[:image]}"
 
-    unless File.exists?(file_location)
-      download_image(download_link, file_location) rescue render_404 and return
-    end
+    download_and_send(download_link)
+  end
 
-    send_file file_location, :disposition => 'inline', :type => 'image/jpeg', :x_sendfile => true
+  def full
+    aws_folder = 'https://thecommunity-assets.s3.amazonaws.com/uploads'
+    download_link = "#{aws_folder}/#{params[:image]}"
+
+    download_and_send(download_link)
   end
 
   private
@@ -51,5 +48,19 @@ class ImagesController < ApplicationController
     open(url) do |u|
       File.open(dest, 'wb') { |f| f.write(u.read) }
     end
+  end
+
+  def download_and_send(download_link)
+    folder = File.join Rails.root, 'tmp', 'images'
+    FileUtils.mkdir_p(folder) unless File.exist?(folder)
+
+    file = request.fullpath.gsub('/', '_')
+    file_location = File.join folder, file
+
+    unless File.exists?(file_location)
+      download_image(download_link, file_location) rescue render_404 and return
+    end
+
+    send_file file_location, :disposition => 'inline', :type => 'image/jpeg', :x_sendfile => true
   end
 end
