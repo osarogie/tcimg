@@ -4,7 +4,7 @@ class ImagesController < ApplicationController
   before_action :get_picture, except: [:index, :with_params]
 
   def index
-    render plain: 'Welcome to the CDN of TheCommunity'
+    render plain: 'Welcome to TheCommunity CDN'
   end
 
   def fit
@@ -61,6 +61,7 @@ class ImagesController < ApplicationController
       download_image(download_link, file_location) rescue render_404 and return
     end
 
+    expires_in 1.year, :public => true
     send_file file_location, :disposition => 'inline', :type => 'image/jpeg', :x_sendfile => true
   end
 end
