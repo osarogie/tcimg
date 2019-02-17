@@ -20,8 +20,8 @@ class ImagesController < ApplicationController
   end
 
   def with_params
-    aws_folder = 'http://thecommunity-assets.s3.amazonaws.com/uploads'
-    download_link = "http://cdn.filter.to/#{params[:img_params]}/#{aws_folder}/#{params[:image]}"
+    aws_folder = 'thecommunity-assets.s3.amazonaws.com/uploads'
+    download_link = "https://ahuswgemen.cloudimg.io/crop/#{params[:img_params]}/x/#{aws_folder}/#{params[:image]}"
 
     download_and_send(download_link)
   end
