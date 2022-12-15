@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/:dimensions/:name", "destination": "/api/images/crop/:dimensions/:name" },
+    { "source": "/:name", "destination": "/api/images/:name" }
+  ]
+}
