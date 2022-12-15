@@ -13,8 +13,6 @@ const handler: VercelApiHandler = async function Image(req, res) {
   try {
     await downloadAndSend(`${name}-${dimensions}`, downloadLink, res)
   } catch (error) {
-    console.log(error)
-
     res.status(500).json({ errors: [{ message: error.message }] })
     return
   }
